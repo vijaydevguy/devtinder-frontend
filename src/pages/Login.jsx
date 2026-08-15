@@ -1,24 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
+import { loginService } from "../services/authService";
+import { useLogin } from "../hooks/useLogin";
 
 const Login = () => {
-  const LoginSchema = Yup.object().shape({
-    email: Yup.string()
-      .required("Email is required")
-      .email("Invalid email format")
-      .matches(
-        /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-        "Please enter a valid email address",
-      ),
-    password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
-      .matches(/[a-z]/, "Must contain at least one lowercase letter")
-      .matches(/[A-Z]/, "Must contain at least one uppercase letter")
-      .matches(/[0-9]/, "Must contain at least one number")
-      .matches(/[@$!%*?&]/, "Must contain at least one special character"),
-  });
+  const { LoginSchema, initialValues, handleSubmit } = useLogin();
 
   return (
     <div className="flex justify-center items-center lg:h-[60vh]">
@@ -26,15 +13,9 @@ const Login = () => {
         <div className="card-body flex flex-col gap-4">
           <h2 className="card-title">Login</h2>
           <Formik
-            initialValues={{
-              email: "",
-              password: "",
-            }}
+            initialValues={initialValues}
             validationSchema={LoginSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              console.log(values, "testPayload");
-              setSubmitting(false);
-            }}
+            onSubmit={handleSubmit}
           >
             {({ isSubmitting }) => (
               <Form className="flex flex-col gap-8">

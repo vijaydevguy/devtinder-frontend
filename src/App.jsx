@@ -6,9 +6,23 @@ import Body from "./pages/Body";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 
+import { ToastContainer, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function App() {
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Body />}>
