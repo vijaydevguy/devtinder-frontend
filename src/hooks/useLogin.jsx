@@ -6,7 +6,7 @@ import { notify } from "../utils/toastify";
 
 export const useLogin = () => {
   const LoginSchema = Yup.object().shape({
-    email: Yup.string()
+    emailId: Yup.string()
       .required("Email is required")
       .email("Invalid email format")
       .matches(
@@ -23,21 +23,21 @@ export const useLogin = () => {
   });
 
   const initialValues = {
-    email: "",
+    emailId: "",
     password: "",
   };
 
   const handleSubmit = async (
     values,
     { setSubmitting, resetForm, setErrors },
-  ) => {
+  ) => {  
     console.log(values, "testPayload");
 
     try {
       const res = await loginService(values);
-      if (res.success) {
-        notify("Logged in successfully", res.message);
-      }
+      notify("Logged in successfully", res.firstName);
+      // if (res.success) {
+      // }
     } catch (error) {
       notify(`Login failed ${error.message}`, "error");
     } finally {

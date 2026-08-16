@@ -25,12 +25,12 @@ const Login = () => {
                   <legend className="fieldset-legend">Email</legend>
                   <Field
                     type="text"
-                    name="email"
+                    name="emailId"
                     className="input"
                     placeholder="Type here"
                   />
                   <ErrorMessage
-                    name="email"
+                    name="emailId"
                     component="div"
                     className="text-red-500 text-sm absolute -bottom-6"
                   />
