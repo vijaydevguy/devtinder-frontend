@@ -5,9 +5,11 @@ import { loginService } from "../services/authService";
 import { notify } from "../utils/toastify";
 import { useDispatch } from "react-redux";
 import { addUser } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export const useLogin = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const LoginSchema = Yup.object().shape({
     emailId: Yup.string()
@@ -45,6 +47,7 @@ export const useLogin = () => {
       dispatch(addUser(res.data));
 
       notify("Logged in successfully", res.firstName);
+      navigate("/");
     } catch (error) {
       notify(`Login failed ${error.message}`, "error");
     } finally {
