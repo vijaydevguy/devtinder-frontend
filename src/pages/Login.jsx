@@ -57,7 +57,7 @@ const Login = () => {
                     disabled={isSubmitting}
                     className="btn btn-primary"
                   >
-                    Login
+                    {isSubmitting ? "Loading..." : "Login"}
                   </button>
                 </div>
               </Form>

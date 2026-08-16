@@ -1,6 +1,12 @@
 import React from "react";
+import { selectUserDetails } from "../redux/selectors/userSelector";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  // this user userDetails comes from redux userSlice
+  const user = useSelector(selectUserDetails) || null;
+  console.log(user, "testReduxStoredUser");
+
   return (
     <div className="navbar bg-base-200 shadow-sm">
       <div className="flex-1">
@@ -21,7 +27,11 @@ const Navbar = () => {
             <div className="w-10 rounded-full">
               <img
                 alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                src={
+                  user && user.photoUrl
+                    ? user.photoUrl
+                    : "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                }
               />
             </div>
           </div>

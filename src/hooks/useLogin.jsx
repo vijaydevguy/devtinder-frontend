@@ -3,8 +3,12 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { loginService } from "../services/authService";
 import { notify } from "../utils/toastify";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/slices/userSlice";
 
 export const useLogin = () => {
+  const dispatch = useDispatch();
+
   const LoginSchema = Yup.object().shape({
     emailId: Yup.string()
       .required("Email is required")
@@ -30,17 +34,21 @@ export const useLogin = () => {
   const handleSubmit = async (
     values,
     { setSubmitting, resetForm, setErrors },
-  ) => {  
+  ) => {
     console.log(values, "testPayload");
 
     try {
       const res = await loginService(values);
+      // console.log(res, "testLoginRes");
+
+      // store data in redux
+      dispatch(addUser(res.data));
+
       notify("Logged in successfully", res.firstName);
-      // if (res.success) {
-      // }
     } catch (error) {
       notify(`Login failed ${error.message}`, "error");
     } finally {
+      resetForm();
       setSubmitting(false);
     }
   };
