@@ -1,15 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { loginService } from "../services/authService";
+import { fetchUser, loginService } from "../services/authService";
 import { notify } from "../utils/toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { selectUserDetails } from "../redux/selectors/userSelector";
 
 export const useLogin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [user, setUser] = useState();
+
+  const userData = useSelector(selectUserDetails) || null;
 
   const LoginSchema = Yup.object().shape({
     emailId: Yup.string()
@@ -56,9 +63,34 @@ export const useLogin = () => {
     }
   };
 
+  const getUser = async () => {
+    if (userData) return;
+    try {
+      setLoading(true);
+      const res = await fetchUser();
+      // console.log(res, "testFetchUser");
+      setUser(res.data);
+      dispatch(addUser(res.data));
+    } catch (error) {
+      // notify(error.message, "error");
+      console.log(error.message);
+      if (error.status == 401) {
+        navigate("/login");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return {
     LoginSchema,
     initialValues,
     handleSubmit,
+    getUser,
+    loading,
+    setLoading,
+    error,
+    setError,
+    userData,
   };
 };
