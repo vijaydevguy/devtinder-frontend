@@ -2,11 +2,14 @@ import React from "react";
 import { selectUserDetails } from "../redux/selectors/userSelector";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { useLogin } from "../hooks/useLogin";
 
 const Navbar = () => {
   // this user userDetails comes from redux userSlice
   const user = useSelector(selectUserDetails) || null;
   console.log(user, "testReduxStoredUser");
+
+  const { handleLogout } = useLogin();
 
   return (
     <div className="navbar bg-base-200 shadow-sm">
@@ -52,7 +55,9 @@ const Navbar = () => {
               <a>Settings</a>
             </li>
             <li>
-              <a>Logout</a>
+              <button className="cursor-pointer" onClick={handleLogout}>
+                Logout
+              </button>
             </li>
           </ul>
         </div>

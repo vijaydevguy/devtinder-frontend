@@ -18,3 +18,14 @@ export const fetchUser = async () => {
   });
   return res;
 };
+
+export const logout = async () => {
+  const res = await axios.post(
+    `${baseUrl}/logout`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+  return res;
+};

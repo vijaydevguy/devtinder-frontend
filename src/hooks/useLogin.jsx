@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { fetchUser, loginService } from "../services/authService";
+import { fetchUser, loginService, logout } from "../services/authService";
 import { notify } from "../utils/toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../redux/slices/userSlice";
+import { addUser, removeUser } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../redux/selectors/userSelector";
 
@@ -40,6 +40,7 @@ export const useLogin = () => {
     password: "",
   };
 
+  // login user
   const handleSubmit = async (
     values,
     { setSubmitting, resetForm, setErrors },
@@ -63,6 +64,7 @@ export const useLogin = () => {
     }
   };
 
+  // get user
   const getUser = async () => {
     if (userData) return;
     try {
@@ -82,6 +84,16 @@ export const useLogin = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      const res = await logout();
+      dispatch(removeUser());
+      navigate("/login");
+    } catch (error) {
+      console.log(`Logout failed, ${error}`);
+    }
+  };
+
   return {
     LoginSchema,
     initialValues,
@@ -92,5 +104,6 @@ export const useLogin = () => {
     error,
     setError,
     userData,
+    handleLogout,
   };
 };
