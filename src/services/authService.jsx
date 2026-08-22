@@ -1,6 +1,8 @@
 import axios from "axios";
+import { baseUrl } from "../../common";
 
-const baseUrl = "https://devtinder-backend-lgug.onrender.com";
+// const baseUrl = "https://devtinder-backend-lgug.onrender.com";
+// const baseUrl = apiUrl;
 
 // Change this in authService.jsx
 // const baseUrl = "http://localhost:5000";

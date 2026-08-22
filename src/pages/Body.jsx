@@ -19,7 +19,6 @@ const Body = () => {
       <Outlet />
       <div>
         {loading && "loading..."}
-        {}
       </div>
 
       <Footer />
