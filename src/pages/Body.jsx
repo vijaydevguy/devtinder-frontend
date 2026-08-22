@@ -17,9 +17,9 @@ const Body = () => {
     <>
       <Navbar />
       <Outlet />
-      <div>
+      {/* <div>
         {loading && "loading..."}
-      </div>
+      </div> */}
 
       <Footer />
     </>

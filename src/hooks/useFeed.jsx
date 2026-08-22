@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addFeed } from "../redux/slices/feedSlice";
 
 const useFeed = () => {
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
   const [feed, setFeed] = useState(null);
 
   const dispatch = useDispatch();
@@ -16,6 +16,7 @@ const useFeed = () => {
       const res = await fetchFeeding();
       console.log(res, "testFeed");
       dispatch(addFeed(res?.data?.data));
+      setFeed(res?.data?.data);
     } catch (error) {
       console.log(`Failed fetching feed ${error.message}`);
     } finally {
