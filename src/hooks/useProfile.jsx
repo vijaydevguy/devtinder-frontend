@@ -6,13 +6,13 @@ import { notify } from "../utils/toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../redux/selectors/userSelector";
+import { updateProfile } from "../services/profileService";
+import { addUser } from "../redux/slices/userSlice";
 
 const useProfile = () => {
-  const [loading, setLoading] = useState(false);
-
   const user = useSelector(selectUserDetails) || null;
-  console.log(user,"testUserFrom")
-
+  // console.log(user, "testUserFrom");
+  const dispatch = useDispatch();
 
   const ProfileSchema = Yup.object().shape({
     firstName: Yup.string().required("First Name is required"),
@@ -28,25 +28,28 @@ const useProfile = () => {
     gender: user?.gender || "",
   };
 
-  console.log("initialValueof",initialValues)
+  // console.log("initialValueof", initialValues);
 
   const handleSubmit = async (
     values,
     { setSubmitting, resetForm, setErrors },
   ) => {
-    console.log("Submitted Profile");
     try {
-      setLoading(true);
+      const res = await updateProfile(values);
+      // console.log(res, "testUpdateProfile");
+      dispatch(addUser(res));
+      notify("Profile updated successfully");
     } catch (error) {
+      console.error(error);
+      notify("Failed to update profile");
     } finally {
-      setLoading(false);
+      // console.log("Submitted Profile");
+      setSubmitting(false);
     }
   };
 
   return {
     ProfileSchema,
-    loading,
-    setLoading,
     initialValues,
     handleSubmit,
     user,

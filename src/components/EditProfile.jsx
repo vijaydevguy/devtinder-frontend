@@ -4,8 +4,7 @@ import useProfile from "../hooks/useProfile";
 import { VscEdit } from "react-icons/vsc";
 
 const EditProfile = () => {
-  const { ProfileSchema, loading, setLoading, initialValues, handleSubmit } =
-    useProfile();
+  const { ProfileSchema, initialValues, handleSubmit } = useProfile();
 
   return (
     <div className="flex justify-center items-center ">
@@ -21,9 +20,11 @@ const EditProfile = () => {
             {({ values, isSubmitting }) => (
               <Form className="flex flex-col gap-8">
                 <div className="flex w-full justify-center">
-                  <button className="relative cursor-pointer">
+                  <button 
+                  type="button"
+                  className="relative cursor-pointer">
                     <img
-                      src={values.photoUrl || ""}
+                      src={values.photoUrl || null}
                       alt=""
                       name="photoUrl"
                       className="rounded-full bg-gray-200 w-16 h-16 object-center object-cover"

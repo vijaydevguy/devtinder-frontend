@@ -19,3 +19,5 @@
 15. feed api call to get feed use data's
 16. edit profile
 17. validate edit profile
+18. create profile service and make api call
+19. update profile page after update redux
