@@ -9,6 +9,8 @@ import Feed from "./components/Feed";
 
 import { ToastContainer, Bounce } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Connections from "./pages/Connections";
+import Requests from "./pages/Requests";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
             <Route path="/" element={<Feed />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/connections" element={<Connections />} />
+            <Route path="/requests" element={<Requests />} />
           </Route>
         </Routes>
       </BrowserRouter>
