@@ -2,28 +2,47 @@ import React, { useEffect } from "react";
 import useConnections from "../hooks/useConnections";
 
 const Connections = () => {
-  const { loading, connections, getConnections } = useConnections();
+  const { loading, connections, error, getConnections } = useConnections();
 
   useEffect(() => {
-    if (!connections) {
+    if (connections === null) {
       getConnections();
     }
-  }, []);
+  }, [connections, getConnections]);
+
+  const renderContent = () => {
+    if (loading) {
+      return <h2>Loading...</h2>;
+    }
+
+    if (error) {
+      return (
+        <div>
+          <h2>Something went wrong.</h2>
+          <button onClick={getConnections}>Retry</button>
+        </div>
+      );
+    }
+
+    if (!connections || connections.length === 0) {
+      return <h2>Make more connections</h2>;
+    }
+
+    return (
+      <div className="flex flex-col gap-5">
+        {connections.map((connection) => (
+          <div key={connection._id || connection.id} className="flex flex-col gap-4">
+            <h2>{connection?.firstName}</h2>
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col gap-6">
-      <h2>Connections</h2>
-      {(connections && connections.length == 0) && <h2>Make more connections</h2>}
-      {loading && <h2>Loading...</h2>}
-      <div className="flex flex-col gap-5">
-        {connections &&
-          connections.length > 0 &&
-          connections.map((connection, i) => (
-            <div key={i} className="flex flex-col gap-4">
-              <h2>{connection?.firstName}</h2>
-            </div>
-          ))}
-      </div>
+      <h1 className="text-2xl font-bold">Connections</h1>
+      {renderContent()}
     </div>
   );
 };
