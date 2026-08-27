@@ -29,18 +29,34 @@ const Connections = () => {
     }
 
     return (
-      <div className="flex flex-col gap-5">
-        {connections.map((connection) => (
-          <div key={connection._id || connection.id} className="flex flex-col gap-4">
-            <h2>{connection?.firstName}</h2>
-          </div>
-        ))}
+      <div className="flex flex-col gap-5 ">
+        {connections.map((connection) => {
+          const { firstName, lastName, photoUrl, age, gender, about } =
+            connection;
+          return (
+            <div
+              key={connection._id || connection.id}
+              className="flex flex-row items-center gap-6 bg-black/10 p-4 rounded-2xl border border-white/5  "
+            >
+              <img
+                src={photoUrl}
+                alt="img"
+                className="w-14 h-14 object-center object-cover rounded-full pointer-events-none select-none"
+              />
+              <div className="flex flex-col gap-4">
+                <h2 className="font-medium text-xl">{`${firstName} ${lastName}`}</h2>
+                {age && gender && <p>{`${age}-${gender}`}</p>}
+                <p className="text-sm text-gray-200">{about}</p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     );
   };
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col lg:gap-8 gap-5 px-4 py-10 lg:max-w-[40%] mx-auto">
       <h1 className="text-2xl font-bold">Connections</h1>
       {renderContent()}
     </div>
