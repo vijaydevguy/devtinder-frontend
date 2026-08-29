@@ -18,7 +18,7 @@ export const useLogin = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [user, setUser] = useState();
+  // const [user, setUser] = useState();
   const [isLogin, setIsLogin] = useState(true);
 
   const userData = useSelector(selectUserDetails) || null;
@@ -107,7 +107,7 @@ export const useLogin = () => {
       setLoading(true);
       const res = await fetchUser();
       // console.log(res, "testFetchUser");
-      setUser(res.data);
+      // setUser(res.data);
       dispatch(addUser(res.data));
     } catch (error) {
       // notify(error.message, "error");
