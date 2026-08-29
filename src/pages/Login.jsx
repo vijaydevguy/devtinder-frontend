@@ -11,6 +11,7 @@ const Login = () => {
         <div className="card-body flex flex-col gap-4">
           <h2 className="card-title"> {isLogin ? "Login" : "Sign up"}</h2>
           <Formik
+            enableReinitialize
             initialValues={initialValues}
             validationSchema={LoginSchema}
             onSubmit={handleSubmit}
