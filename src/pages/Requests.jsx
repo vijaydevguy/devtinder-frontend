@@ -2,7 +2,14 @@ import { useEffect } from "react";
 import useRequests from "../hooks/useRequests";
 
 const Requests = () => {
-  const { loading, requests, error, getRequests } = useRequests();
+  const {
+    loading,
+    requests,
+    error,
+    getRequests,
+    handleReviewRequest,
+    reviewItem,
+  } = useRequests();
 
   useEffect(() => {
     if (requests === null) {
@@ -31,8 +38,13 @@ const Requests = () => {
     return (
       <div className="flex flex-col gap-5 ">
         {requests.map((request) => {
-          const { firstName, lastName, photoUrl, age, gender, about } =
+          const { _id, firstName, lastName, photoUrl, age, gender, about } =
             request?.fromUserId;
+
+          const isLoading = reviewItem && request._id == _id;
+          const isAccepting = isLoading && reviewItem.status == "accepted";
+          const isRejecting = isLoading && reviewItem.status == "rejected";
+
           return (
             <div
               key={request._id || request.id}
@@ -53,8 +65,20 @@ const Requests = () => {
 
               {/* buttons */}
               <div className="flex flex-row items-center gap-4 w-full lg:w-fit">
-                <button className="btn btn-primary btn-outline w-full flex-1">Reject</button>
-                <button className="btn btn-secondary w-full flex-1">Accept</button>
+                <button
+                  disabled={isLoading}
+                  onClick={() => handleReviewRequest("rejected", request?._id)}
+                  className="btn btn-primary btn-outline w-full flex-1 cursor-pointer"
+                >
+                  {isRejecting ? "Rejecting..." : "Reject"}
+                </button>
+                <button
+                  disabled={isLoading}
+                  onClick={() => handleReviewRequest("accepted", request?._id)}
+                  className="btn btn-secondary w-full flex-1 cursor-pointer"
+                >
+                  {isAccepting ? "Accepting..." : "Accept"}
+                </button>
               </div>
             </div>
           );

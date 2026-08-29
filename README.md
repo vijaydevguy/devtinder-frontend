@@ -25,4 +25,5 @@
 21. create connections ui and fixes
 22. create request api call
 23. create request ui fix
-24. 
+24. writing functions for accept and reject request
+25. 
