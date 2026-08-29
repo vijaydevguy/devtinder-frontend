@@ -1,14 +1,14 @@
 import { useEffect } from "react";
-import useConnections from "../hooks/useConnections";
+import useRequests from "../hooks/useRequests";
 
 const Requests = () => {
-  const { loading, requests, error, getRequests } = useConnections();
+  const { loading, requests, error, getRequests } = useRequests();
 
   useEffect(() => {
     if (requests === null) {
       getRequests();
     }
-  }, [requests, getRequests]);
+  }, []);
 
   const renderContent = () => {
     if (loading) {
@@ -32,12 +32,13 @@ const Requests = () => {
       <div className="flex flex-col gap-5 ">
         {requests.map((request) => {
           const { firstName, lastName, photoUrl, age, gender, about } =
-            requests;
+            request?.fromUserId;
           return (
             <div
               key={request._id || request.id}
               className="flex flex-row items-center gap-6 bg-black/10 p-4 rounded-2xl border border-white/5  "
             >
+              <div></div>
               <img
                 src={photoUrl}
                 alt="img"
