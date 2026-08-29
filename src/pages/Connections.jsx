@@ -56,7 +56,7 @@ const Connections = () => {
   };
 
   return (
-    <div className="flex flex-col lg:gap-8 gap-5 px-4 py-10 lg:max-w-[40%] mx-auto">
+    <div className="flex flex-col lg:gap-8 gap-5 px-4 py-10 lg:max-w-[50%] mx-auto">
       <h1 className="text-2xl font-bold">Connections</h1>
       {renderContent()}
     </div>

@@ -21,3 +21,8 @@
 17. validate edit profile
 18. create profile service and make api call
 19. update profile page after update redux
+20. create connection api call
+21. create connections ui and fixes
+22. create request api call
+23. create request ui fix
+24. 
