@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useState } from "react";
 import * as Yup from "yup";
-import { fetchUser, loginService, logout } from "../services/authService";
+import {
+  fetchUser,
+  loginService,
+  logout,
+  signUp,
+} from "../services/authService";
 import { notify } from "../utils/toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../redux/slices/userSlice";
@@ -15,6 +19,7 @@ export const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [user, setUser] = useState();
+  const [isLogin, setIsLogin] = useState(true);
 
   const userData = useSelector(selectUserDetails) || null;
 
@@ -33,12 +38,24 @@ export const useLogin = () => {
       .matches(/[A-Z]/, "Must contain at least one uppercase letter")
       .matches(/[0-9]/, "Must contain at least one number")
       .matches(/[@$!%*?&]/, "Must contain at least one special character"),
+
+    ...(!isLogin && {
+      firstName: Yup.string().required("First name is required"),
+      lastName: Yup.string().optional(),
+    }),
   });
 
-  const initialValues = {
-    emailId: "",
-    password: "",
-  };
+  const initialValues = isLogin
+    ? {
+        emailId: "",
+        password: "",
+      }
+    : {
+        firstName: "",
+        lastName: "",
+        emailId: "",
+        password: "",
+      };
 
   // login user
   const handleSubmit = async (
@@ -48,16 +65,35 @@ export const useLogin = () => {
     console.log(values, "testPayload");
 
     try {
-      const res = await loginService(values);
-      // console.log(res, "testLoginRes");
+      if (isLogin) {
+        const loginPayload = {
+          emailId: values.emailId,
+          password: values.password,
+        };
+        const res = await loginService(loginPayload);
+        // const res = await loginService(values);
+        // store data in redux
+        dispatch(addUser(res.data));
+        notify("Logged in successfully", `${res.firstName}${res.lastName}`);
+      } else {
+        const signupPayload = {
+          firstName: values.firstName,
+          lastName: values.lastName,
+          emailId: values.emailId,
+          password: values.password,
+        };
+        const res = await signUp(signupPayload);
+        // store data in redux
+        dispatch(addUser(res.data));
+        notify("Sign up successfully", `${res.firstName}${res.lastName}`);
+      }
 
-      // store data in redux
-      dispatch(addUser(res.data));
-
-      notify("Logged in successfully", res.firstName);
       navigate("/");
     } catch (error) {
-      notify(`Login failed ${error.message}`, "error");
+      notify(
+        `${isLogin ? "Login" : "Sign up"} failed ${error.message}`,
+        "error",
+      );
     } finally {
       resetForm();
       setSubmitting(false);
@@ -105,5 +141,7 @@ export const useLogin = () => {
     setError,
     userData,
     handleLogout,
+    isLogin,
+    setIsLogin,
   };
 };

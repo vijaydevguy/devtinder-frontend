@@ -14,6 +14,13 @@ export const loginService = async (payload) => {
   return res;
 };
 
+export const signUp = async (payload) => {
+  const res = await axios.post(`${baseUrl}/signup`, payload, {
+    withCredentials: true,
+  });
+  return res;
+};
+
 export const fetchUser = async () => {
   const res = await axios.get(`${baseUrl}/profile/view`, {
     withCredentials: true,
