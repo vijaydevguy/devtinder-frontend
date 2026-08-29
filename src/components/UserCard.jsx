@@ -16,7 +16,7 @@ const UserCard = ({ isLoading = false, item, handleSendRequest, reqItem }) => {
             "https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
           }
           alt="Shoes"
-          className="object-cover object-top w-full h-[280px]"
+          className="object-cover object-top w-full h-[280px] pointer-events-none select-none"
         />
       </figure>
       <div className="card-body">
