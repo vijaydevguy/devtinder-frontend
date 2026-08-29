@@ -1,12 +1,12 @@
 import UserSkeleton from "./UserSkeleton";
 
-const UserCard = ({ isLoading = false, item }) => {
-  const { photoUrl, about, firstName, lastName } = item;
+const UserCard = ({ isLoading = false, item, handleSendRequest, reqItem }) => {
+  const { _id, photoUrl, about, firstName, lastName } = item;
+  const isReqLoading = reqItem && reqItem.id == _id;
+  const isInterested = isReqLoading && (reqItem.status = "interested");
+  const isIgnored = isReqLoading && (reqItem.status = "ignored");
 
-  return isLoading ? (
-    /* Skeleton Loading State */
-    <UserSkeleton />
-  ) : (
+  return (
     /* Loaded Card State */
     <div className="card bg-base-100 w-96 shadow-sm justify-center bg-white/5">
       <figure>
@@ -23,8 +23,20 @@ const UserCard = ({ isLoading = false, item }) => {
         <h2 className="card-title">{`${firstName} ${lastName}`}</h2>
         <p>{about}</p>
         <div className="card-actions justify-end">
-          <button className="btn btn-outline">Ignore</button>
-          <button className="btn btn-secondary">Accept</button>
+          <button
+            onClick={() => handleSendRequest("ignored", _id)}
+            disabled={isReqLoading}
+            className="btn btn-outline"
+          >
+            {isIgnored ? "Ignoring..." : "Ignore"}
+          </button>
+          <button
+            onClick={() => handleSendRequest("interested", _id)}
+            disabled={isReqLoading}
+            className="btn btn-secondary"
+          >
+            {isInterested ? "Accepting..." : "Accept"}
+          </button>
         </div>
       </div>
     </div>

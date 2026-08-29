@@ -26,4 +26,5 @@
 22. create request api call
 23. create request ui fix
 24. writing functions for accept and reject request
-25. 
+25. send/ignore to the user from feed page
+26. signup new user

@@ -6,7 +6,7 @@ import { feedSelector } from "../redux/selectors/feedSelector";
 import UserSkeleton from "./UserSkeleton";
 
 const Feed = () => {
-  const { getFeed, loading, feed } = useFeed();
+  const { getFeed, loading, handleSendRequest, reqItem } = useFeed();
 
   const Feeds = useSelector(feedSelector);
 
@@ -20,12 +20,20 @@ const Feed = () => {
     <div>
       <div className="flex flex-col gap-6 w-fit mx-auto items-center justify-center my-10">
         {loading && <UserSkeleton />}
-        {!loading &&
-          feed &&
+        {console.log(Feeds, "testFeed")}
+        {Feeds &&
           Feeds.length > 0 &&
-          Feeds.map((item, i) => (
-            <UserCard key={i} isLoading={loading} item={item} />
-          ))}
+          Feeds.map((item, i) => {
+            // console.log({ item }, "testItem");
+            return (
+              <UserCard
+                key={i}
+                item={item}
+                handleSendRequest={handleSendRequest}
+                reqItem={reqItem}
+              />
+            );
+          })}
       </div>
 
       {(!Feeds || Feeds.length <= 0) && !loading && <h2>No data found</h2>}

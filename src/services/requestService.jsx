@@ -18,3 +18,14 @@ export const reviewRequest = async (status, id) => {
   );
   return res;
 };
+
+export const sendRequest = async (status, id) => {
+  const res = await axios.post(
+    `${baseUrl}/request/send/${status}/${id}`,
+    {},
+    {
+      withCredentials: true,
+    },
+  );
+  return res;
+};
