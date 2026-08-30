@@ -4,7 +4,14 @@ import useProfile from "../hooks/useProfile";
 import { VscEdit } from "react-icons/vsc";
 
 const EditProfile = () => {
-  const { ProfileSchema, initialValues, handleSubmit } = useProfile();
+  const {
+    ProfileSchema,
+    initialValues,
+    handleSubmit,
+    fileInputRef,
+    uploadImg,
+    handleFileChange,
+  } = useProfile();
 
   return (
     <div className="flex justify-center items-center ">
@@ -17,12 +24,24 @@ const EditProfile = () => {
             onSubmit={handleSubmit}
             enableReinitialize
           >
-            {({ values, isSubmitting }) => (
+            {({ values, isSubmitting,setFieldValue }) => (
               <Form className="flex flex-col gap-8">
                 <div className="flex w-full justify-center">
-                  <button 
-                  type="button"
-                  className="relative cursor-pointer">
+                  {/* Hidden file input */}
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => handleFileChange(e, setFieldValue)}
+                  />
+
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadImg}
+                    type="button"
+                    className="relative cursor-pointer"
+                  >
                     <img
                       src={values.photoUrl || null}
                       alt=""

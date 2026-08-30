@@ -1,2 +1,7 @@
 // export const baseUrl = "http://localhost:5000";
 export const baseUrl = "https://devtinder-backend-lgug.onrender.com";
+
+export const cloudinaryConfig = {
+    cloudname:"dtgn3hnzh",
+    uploadpreset:"devtinder",
+}

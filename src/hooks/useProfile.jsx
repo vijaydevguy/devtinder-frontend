@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { fetchUser, loginService, logout } from "../services/authService";
@@ -8,11 +8,15 @@ import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../redux/selectors/userSelector";
 import { updateProfile } from "../services/profileService";
 import { addUser } from "../redux/slices/userSlice";
+import uploadToCloudinary from "../utils/uploadToCloudinary";
 
 const useProfile = () => {
   const user = useSelector(selectUserDetails) || null;
   // console.log(user, "testUserFrom");
   const dispatch = useDispatch();
+
+  const fileInputRef = useRef(null);
+  const [uploadImg, setUploadImg] = useState(false);
 
   const ProfileSchema = Yup.object().shape({
     firstName: Yup.string().required("First Name is required"),
@@ -50,11 +54,32 @@ const useProfile = () => {
     }
   };
 
+  const handleFileChange = async (e, setFieldValue) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploadImg(true);
+      const uploadedUrl = await uploadToCloudinary(file);
+      if (uploadedUrl) {
+        setFieldValue("photoUrl", uploadedUrl);
+      }
+    } catch (error) {
+      notify(`Image upload failed with ${error.message}`);
+    } finally {
+      setUploadImg(false);
+    }
+  };
+
   return {
     ProfileSchema,
     initialValues,
     handleSubmit,
     user,
+    fileInputRef,
+    uploadImg,
+    setUploadImg,
+    handleFileChange,
   };
 };
 
