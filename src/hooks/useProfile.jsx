@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRef, useState } from "react";
 import * as Yup from "yup";
-import { fetchUser, loginService, logout } from "../services/authService";
 import { notify } from "../utils/toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../redux/selectors/userSelector";
 import { updateProfile } from "../services/profileService";
 import { addUser } from "../redux/slices/userSlice";

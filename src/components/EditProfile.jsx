@@ -15,7 +15,7 @@ const EditProfile = () => {
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="card bg-base-200 w-96 lg:w-1/2 shadow-sm ">
+      <div className="card bg-base-200 w-full lg:w-1/2 md:w-3/4 shadow-sm mx-6">
         <div className="card-body flex flex-col gap-4">
           <h2 className="card-title">Profile</h2>
           <Formik
@@ -26,7 +26,7 @@ const EditProfile = () => {
           >
             {({ values, isSubmitting, setFieldValue }) => (
               <Form className="grid md:grid-cols-2 grid-cols-1 gap-8">
-                <div className="flex w-full justify-center lg:col-span-2">
+                <div className="flex w-full justify-center md:col-span-2">
                   {/* Hidden file input */}
                   <input
                     type="file"
@@ -138,7 +138,7 @@ const EditProfile = () => {
                 </fieldset>
 
                 {/* submit button */}
-                <div className="card-actions justify-end lg:col-span-2">
+                <div className="card-actions justify-end md:col-span-2">
                   <button
                     type="submit"
                     disabled={isSubmitting}
