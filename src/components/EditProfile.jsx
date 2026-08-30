@@ -15,7 +15,7 @@ const EditProfile = () => {
 
   return (
     <div className="flex justify-center items-center ">
-      <div className="card bg-base-200 w-96 shadow-sm ">
+      <div className="card bg-base-200 w-96 lg:w-1/2 shadow-sm ">
         <div className="card-body flex flex-col gap-4">
           <h2 className="card-title">Profile</h2>
           <Formik
@@ -24,9 +24,9 @@ const EditProfile = () => {
             onSubmit={handleSubmit}
             enableReinitialize
           >
-            {({ values, isSubmitting,setFieldValue }) => (
-              <Form className="flex flex-col gap-8">
-                <div className="flex w-full justify-center">
+            {({ values, isSubmitting, setFieldValue }) => (
+              <Form className="grid md:grid-cols-2 grid-cols-1 gap-8">
+                <div className="flex w-full justify-center lg:col-span-2">
                   {/* Hidden file input */}
                   <input
                     type="file"
@@ -57,12 +57,12 @@ const EditProfile = () => {
 
                 {/* <div className=""> */}
                 {/* firstName */}
-                <fieldset className="fieldset relative">
+                <fieldset className="fieldset relative w-full">
                   <legend className="fieldset-legend">First Name</legend>
                   <Field
                     type="text"
                     name="firstName"
-                    className="input"
+                    className="input w-full"
                     placeholder="Type here"
                   />
                   <ErrorMessage
@@ -78,7 +78,7 @@ const EditProfile = () => {
                   <Field
                     type="text"
                     name="lastName"
-                    className="input"
+                    className="input w-full"
                     placeholder="Type here"
                   />
                   <ErrorMessage
@@ -94,7 +94,7 @@ const EditProfile = () => {
                   <Field
                     type="text"
                     name="age"
-                    className="input"
+                    className="input w-full"
                     placeholder="Type here"
                   />
                   <ErrorMessage
@@ -105,7 +105,7 @@ const EditProfile = () => {
                 </fieldset>
 
                 {/* gender */}
-                <fieldset className="fieldset relative">
+                {/* <fieldset className="fieldset relative">
                   <legend className="fieldset-legend">Gender</legend>
                   <Field
                     type="text"
@@ -118,10 +118,27 @@ const EditProfile = () => {
                     component="div"
                     className="text-red-500 text-sm absolute -bottom-6"
                   />
+                </fieldset> */}
+                {/* gender */}
+                <fieldset className="fieldset relative">
+                  <legend className="fieldset-legend">Gender</legend>
+                  <Field as="select" name="gender" className="select w-full">
+                    <option value="" disabled>
+                      Select Gender
+                    </option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="others">Others</option>
+                  </Field>
+                  <ErrorMessage
+                    name="firstName" // Note: Remember to update this to name="gender" as well!
+                    component="div"
+                    className="text-red-500 text-sm absolute -bottom-6"
+                  />
                 </fieldset>
 
                 {/* submit button */}
-                <div className="card-actions justify-end">
+                <div className="card-actions justify-end lg:col-span-2">
                   <button
                     type="submit"
                     disabled={isSubmitting}
