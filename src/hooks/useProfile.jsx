@@ -18,6 +18,8 @@ const useProfile = () => {
     firstName: Yup.string().required("First Name is required"),
 
     lastName: Yup.string().required("Last Name is required"),
+    age: Yup.string().required("Age is required"),
+    gender: Yup.string().required("Gender is required"),
   });
 
   const initialValues = {
