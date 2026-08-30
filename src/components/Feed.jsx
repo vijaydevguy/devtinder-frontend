@@ -21,7 +21,7 @@ const Feed = () => {
       <div className="flex flex-col gap-6 w-fit mx-auto items-center justify-center my-10">
         {loading && <UserSkeleton />}
         {console.log(Feeds, "testFeed")}
-        {Feeds &&
+        {!loading &&Feeds &&
           Feeds.length > 0 &&
           Feeds.map((item, i) => {
             // console.log({ item }, "testItem");
