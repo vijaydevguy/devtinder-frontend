@@ -40,7 +40,7 @@ const useProfile = () => {
     try {
       const res = await updateProfile(values);
       // console.log(res, "testUpdateProfile");
-      dispatch(addUser(res));
+      dispatch(addUser(res?.data));
       notify("Profile updated successfully");
     } catch (error) {
       console.error(error);
