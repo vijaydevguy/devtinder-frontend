@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import useConnections from "../hooks/useConnections";
+import RequestSkeleton from "../components/RequestSkeleton";
 
 const Connections = () => {
   const { loading, connections, error, getConnections } = useConnections();
@@ -12,7 +13,7 @@ const Connections = () => {
 
   const renderContent = () => {
     if (loading) {
-      return <h2>Loading...</h2>;
+      return <RequestSkeleton />;
     }
 
     if (error) {

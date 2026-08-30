@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import useRequests from "../hooks/useRequests";
+import RequestSkeleton from "../components/RequestSkeleton";
 
 const Requests = () => {
   const {
@@ -19,7 +20,7 @@ const Requests = () => {
 
   const renderContent = () => {
     if (loading) {
-      return <h2>Loading...</h2>;
+      return <RequestSkeleton />;
     }
 
     if (error) {
