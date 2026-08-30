@@ -19,11 +19,11 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex gap-2">
-        <input
+        {/* <input
           type="text"
           placeholder="Search"
           className="input w-24 md:w-auto"
-        />
+        /> */}
         <div className="dropdown dropdown-end">
           <div
             tabIndex={0}

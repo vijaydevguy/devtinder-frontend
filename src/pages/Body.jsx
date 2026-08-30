@@ -21,7 +21,7 @@ const Body = () => {
         {loading && "loading..."}
       </div> */}
 
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };
