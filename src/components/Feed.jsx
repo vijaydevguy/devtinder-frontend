@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import useFeed from "../hooks/useFeed";
 import UserCard from "./UserCard";
 import { useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import UserSkeleton from "./UserSkeleton";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
 const Feed = () => {
+  const didInitialLoad = useRef(false);
   const { getFeed, loading, hasMore, handleSendRequest, reqItem } = useFeed();
 
   const { lastElementRef } = useInfiniteScroll({
@@ -18,6 +19,8 @@ const Feed = () => {
   const Feeds = useSelector(feedSelector);
 
   useEffect(() => {
+    if (didInitialLoad.current) return;
+    didInitialLoad.current = true;
     getFeed();
   }, []);
 

@@ -3,10 +3,14 @@ import UserSkeleton from "./UserSkeleton";
 
 const UserCard = React.forwardRef(
   ({ isLoading = false, item, handleSendRequest, reqItem }, ref) => {
+
     const { _id, photoUrl, about, firstName, lastName } = item;
+
     const isReqLoading = reqItem && reqItem.id == _id;
-    const isInterested = isReqLoading && (reqItem.status = "interested");
-    const isIgnored = isReqLoading && (reqItem.status = "ignored");
+
+    const isInterested = isReqLoading && reqItem.status === "interested";
+
+    const isIgnored = isReqLoading && reqItem.status === "ignored";
 
     return (
       /* Loaded Card State */
