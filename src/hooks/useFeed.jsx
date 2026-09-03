@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { fetchFeeding } from "../services/feedService";
 import { useDispatch } from "react-redux";
 import { addFeed, removeFeed } from "../redux/slices/feedSlice";
@@ -6,23 +6,35 @@ import { sendRequest } from "../services/requestService";
 import { notify } from "../utils/toastify";
 
 const useFeed = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [reqItem, setReqItem] = useState(null);
+
+  const [hasMore, setHasMore] = useState(true);
+  const [page, setPage] = useState(1);
 
   const dispatch = useDispatch();
 
-  const getFeed = async () => {
+  const getFeed = useCallback(async () => {
+    // we have to avoid redundant api call
+    if (loading || !hasMore) return;
+
     try {
       setLoading(true);
-      const res = await fetchFeeding();
-      console.log(res, "testFeedRes");
-      dispatch(addFeed(res?.data?.data));
+      const res = await fetchFeeding(page);
+      const newItems = res?.data?.data || [];
+      console.log(newItems, "testFeedRes");
+      if (newItems.length == 0) {
+        setHasMore(false);
+      } else {
+        dispatch(addFeed(newItems));
+        setPage((prev) => prev + 1);
+      }
     } catch (error) {
       console.log(`Failed fetching feed ${error.message}`);
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, loading, hasMore, dispatch]);
 
   const handleSendRequest = async (status, id) => {
     try {
@@ -41,6 +53,7 @@ const useFeed = () => {
   return {
     getFeed,
     loading,
+    hasMore,
     setLoading,
     handleSendRequest,
     reqItem,
