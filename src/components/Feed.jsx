@@ -51,7 +51,7 @@ const Feed = () => {
            {loading && <UserSkeleton />}
       </div>
 
-      {(!Feeds || Feeds.length <= 0) && !loading && <h2>No data found</h2>}
+      {(!Feeds || Feeds.length <= 0) && !loading && <h2 className="w-full h-screen items-center justify-center">No data found</h2>}
     </div>
   );
 };
