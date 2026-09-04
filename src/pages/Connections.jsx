@@ -1,9 +1,24 @@
 import React, { useEffect } from "react";
 import useConnections from "../hooks/useConnections";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import RequestSkeleton from "../components/RequestSkeleton";
 
 const Connections = () => {
-  const { loading, connections, error, getConnections } = useConnections();
+  const {
+    loading,
+    loadingMore,
+    hasMore,
+    connections,
+    error,
+    getConnections,
+    loadMoreConnections,
+  } = useConnections();
+
+  const { lastElementRef } = useInfiniteScroll({
+    loading: loadingMore,
+    hasMore,
+    onLoadMore: loadMoreConnections,
+  });
 
   useEffect(() => {
     if (connections === null) {
@@ -31,13 +46,16 @@ const Connections = () => {
 
     return (
       <div className="flex flex-col gap-5 ">
-        {connections.map((connection) => {
+        {connections.map((connection, index) => {
           const { firstName, lastName, photoUrl, age, gender, about } =
             connection;
+          const isLastItem = index === connections.length - 1;
+
           return (
             <div
               key={connection._id || connection.id}
-              className="flex flex-row items-center gap-6 bg-black/10 p-4 rounded-2xl border border-white/5  "
+              ref={isLastItem ? lastElementRef : null}
+              className="flex flex-row items-center gap-6 bg-black/10 p-4 rounded-2xl border border-white/5"
             >
               <img
                 src={photoUrl}
@@ -52,6 +70,7 @@ const Connections = () => {
             </div>
           );
         })}
+        {loadingMore && <RequestSkeleton />}
       </div>
     );
   };
