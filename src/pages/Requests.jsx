@@ -1,16 +1,26 @@
 import { useEffect } from "react";
 import useRequests from "../hooks/useRequests";
+import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import RequestSkeleton from "../components/RequestSkeleton";
 
 const Requests = () => {
   const {
     loading,
+    loadingMore,
+    hasMore,
     requests,
     error,
     getRequests,
+    loadMoreRequests,
     handleReviewRequest,
     reviewItem,
   } = useRequests();
+
+  const { lastElementRef } = useInfiniteScroll({
+    loading: loadingMore,
+    hasMore,
+    onLoadMore: loadMoreRequests,
+  });
 
   useEffect(() => {
     if (requests === null) {
@@ -38,18 +48,20 @@ const Requests = () => {
 
     return (
       <div className="flex flex-col gap-5 ">
-        {requests.map((request) => {
+        {requests.map((request, index) => {
           const { _id, firstName, lastName, photoUrl, age, gender, about } =
             request?.fromUserId;
 
           const isLoading = reviewItem && request._id == _id;
           const isAccepting = isLoading && reviewItem.status == "accepted";
           const isRejecting = isLoading && reviewItem.status == "rejected";
+          const isLastItem = index === requests.length - 1;
 
           return (
             <div
               key={request._id || request.id}
-              className="flex lg:flex-row flex-col items-center justify-between gap-6 bg-black/10 p-4 rounded-2xl border border-white/5  "
+              ref={isLastItem ? lastElementRef : null}
+              className="flex lg:flex-row flex-col items-center justify-between gap-6 bg-black/10 p-4 rounded-2xl border border-white/5"
             >
               <div className="flex flex-row items-center gap-6 w-full flex-1">
                 <img
@@ -64,7 +76,6 @@ const Requests = () => {
                 </div>
               </div>
 
-              {/* buttons */}
               <div className="flex flex-row items-center gap-4 w-full lg:w-fit">
                 <button
                   disabled={isLoading}
@@ -84,6 +95,7 @@ const Requests = () => {
             </div>
           );
         })}
+        {loadingMore && <RequestSkeleton />}
       </div>
     );
   };
