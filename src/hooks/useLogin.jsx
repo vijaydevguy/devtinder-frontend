@@ -112,9 +112,6 @@ export const useLogin = () => {
     } catch (error) {
       // notify(error.message, "error");
       console.log(error.message);
-      if (error.status == 401) {
-        navigate("/login");
-      }
     } finally {
       setLoading(false);
     }
