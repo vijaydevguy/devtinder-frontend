@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import { useLogin } from "../hooks/useLogin";
 import SiriWave from "../components/ui/SiriWave";
 import { initGA, logPageView } from "../utils/analytics";
+import FloatingCalButton from "../components/FloatingCalButton";
 
 const Body = () => {
   const { loading, getUser, error } = useLogin();
@@ -38,7 +39,10 @@ const Body = () => {
             />
         </div>
       ) : (
-        <Outlet />
+        <>
+          <Outlet />
+          <FloatingCalButton />
+        </>
       )}
     </>
   );

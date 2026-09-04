@@ -1,13 +1,14 @@
 import React from "react";
 import { selectUserDetails } from "../redux/selectors/userSelector";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
 
 const Navbar = () => {
   // this user userDetails comes from redux userSlice
   const user = useSelector(selectUserDetails) || null;
   console.log(user, "testReduxStoredUser");
+  const location = useLocation();
 
   const { handleLogout } = useLogin();
 
@@ -41,32 +42,31 @@ const Navbar = () => {
               />
             </div>
           </div>
-          <ul
-            tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-          >
-            <li>
-              <Link to={"/profile"} className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </Link>
-            </li>
-            <li>
-              <Link to={"/requests"}>
-                Requests
-              </Link>
-            </li>
-            <li>
-              <Link to={"/connections"}>
-                Connections
-              </Link>
-            </li>
-            <li>
-              <button className="cursor-pointer" onClick={handleLogout}>
-                Logout
-              </button>
-            </li>
-          </ul>
+          {location.pathname !== "/login" && (
+            <ul
+              tabIndex="-1"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <Link to={"/profile"} className="justify-between">
+                  Profile
+                  <span className="badge">New</span>
+                </Link>
+              </li>
+              <li>
+                <Link to={"/requests"}>Requests</Link>
+              </li>
+              <li>
+                <Link to={"/connections"}>Connections</Link>
+              </li>
+
+              <li>
+                <button className="cursor-pointer" onClick={handleLogout}>
+                  Logout
+                </button>
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </div>

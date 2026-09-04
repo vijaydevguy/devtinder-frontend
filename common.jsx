@@ -6,4 +6,8 @@ export const cloudinaryConfig = {
     uploadpreset:"devtinder",
 }
 
-export const analytics ="G-MHJX00BZTF"
+export const analytics ="G-MHJX00BZTF";
+
+export const calConfig = {
+    link: "vijay-iy2uad/15min" // Replace with your actual Cal.com link
+};
