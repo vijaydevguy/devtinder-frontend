@@ -2,7 +2,7 @@ import ReactGA from 'react-ga4';
 import { analytics } from '../../common';
 
 // Replace with your actual Measurement ID when ready
-const MEASUREMENT_ID = {analytics};
+const MEASUREMENT_ID = analytics;
 
 let isInitialized = false;
 
