@@ -6,7 +6,7 @@ import { sendRequest } from "../services/requestService";
 import { notify } from "../utils/toastify";
 
 const useFeed = () => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [reqItem, setReqItem] = useState(null);
 
   const [hasMore, setHasMore] = useState(true);
