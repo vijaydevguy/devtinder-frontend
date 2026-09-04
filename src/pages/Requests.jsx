@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import useRequests from "../hooks/useRequests";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import RequestSkeleton from "../components/RequestSkeleton";
+import { logEvent } from "../utils/analytics";
 
 const Requests = () => {
   const {
@@ -79,14 +80,20 @@ const Requests = () => {
               <div className="flex flex-row items-center gap-4 w-full lg:w-fit">
                 <button
                   disabled={isLoading}
-                  onClick={() => handleReviewRequest("rejected", request?._id)}
+                  onClick={() => {
+                    logEvent({ category: "Requests", action: "Review", label: "Rejected" });
+                    handleReviewRequest("rejected", request?._id);
+                  }}
                   className="btn btn-primary btn-outline w-full flex-1 cursor-pointer"
                 >
                   {isRejecting ? "Rejecting..." : "Reject"}
                 </button>
                 <button
                   disabled={isLoading}
-                  onClick={() => handleReviewRequest("accepted", request?._id)}
+                  onClick={() => {
+                    logEvent({ category: "Requests", action: "Review", label: "Accepted" });
+                    handleReviewRequest("accepted", request?._id);
+                  }}
                   className="btn btn-secondary w-full flex-1 cursor-pointer"
                 >
                   {isAccepting ? "Accepting..." : "Accept"}

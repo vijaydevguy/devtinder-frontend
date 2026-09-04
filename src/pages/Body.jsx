@@ -4,6 +4,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import { useLogin } from "../hooks/useLogin";
 import SiriWave from "../components/ui/SiriWave";
+import { initGA, logPageView } from "../utils/analytics";
 
 const Body = () => {
   const { loading, getUser, error } = useLogin();
@@ -17,6 +18,14 @@ const Body = () => {
       setIsInitializing(false);
     });
   }, []);
+
+  useEffect(() => {
+    initGA();
+  }, []);
+
+  useEffect(() => {
+    logPageView(location.pathname);
+  }, [location]);
 
   return (
     <>

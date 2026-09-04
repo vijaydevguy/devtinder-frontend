@@ -5,3 +5,5 @@ export const cloudinaryConfig = {
     cloudname:"dtgn3hnzh",
     uploadpreset:"devtinder",
 }
+
+export const analytics ="G-MHJX00BZTF"

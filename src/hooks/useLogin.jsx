@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import { selectUserDetails } from "../redux/selectors/userSelector";
+import { logEvent } from "../utils/analytics";
 
 export const useLogin = () => {
   const dispatch = useDispatch();
@@ -71,9 +72,9 @@ export const useLogin = () => {
           password: values.password,
         };
         const res = await loginService(loginPayload);
-        // const res = await loginService(values);
         // store data in redux
         dispatch(addUser(res.data));
+        logEvent({ category: "Auth", action: "Submit", label: "Login Success" });
         notify("Logged in successfully", `${res.firstName}${res.lastName}`);
       } else {
         const signupPayload = {
@@ -85,6 +86,7 @@ export const useLogin = () => {
         const res = await signUp(signupPayload);
         // store data in redux
         dispatch(addUser(res.data));
+        logEvent({ category: "Auth", action: "Submit", label: "Signup Success" });
         notify("Sign up successfully", `${res.firstName}${res.lastName}`);
       }
 
@@ -120,6 +122,7 @@ export const useLogin = () => {
   const handleLogout = async () => {
     try {
       const res = await logout();
+      logEvent({ category: "Auth", action: "Submit", label: "Logout Success" });
       dispatch(removeUser());
       navigate("/login");
     } catch (error) {

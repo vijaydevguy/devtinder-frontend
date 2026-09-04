@@ -1,5 +1,6 @@
 import React from "react";
 import UserSkeleton from "./UserSkeleton";
+import { logEvent } from "../utils/analytics";
 
 const UserCard = React.forwardRef(
   ({ isLoading = false, item, handleSendRequest, reqItem }, ref) => {
@@ -33,14 +34,20 @@ const UserCard = React.forwardRef(
           <p>{about}</p>
           <div className="card-actions justify-end">
             <button
-              onClick={() => handleSendRequest("ignored", _id)}
+              onClick={() => {
+                logEvent({ category: "Feed", action: "Action", label: "Ignored" });
+                handleSendRequest("ignored", _id);
+              }}
               disabled={isReqLoading}
               className="btn btn-outline"
             >
               {isIgnored ? "Ignoring..." : "Ignore"}
             </button>
             <button
-              onClick={() => handleSendRequest("interested", _id)}
+              onClick={() => {
+                logEvent({ category: "Feed", action: "Action", label: "Accepted" });
+                handleSendRequest("interested", _id);
+              }}
               disabled={isReqLoading}
               className="btn btn-secondary"
             >
