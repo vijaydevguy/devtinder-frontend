@@ -28,3 +28,8 @@
 24. writing functions for accept and reject request
 25. send/ignore to the user from feed page
 26. signup new user
+27. create profile update and view profile page
+28. implementation lazy loading with pagination api for requests,connections and feed
+29. implemented swipe functionality.
+30. fixed bugs on that
+31. fixed autofocus issue in login page

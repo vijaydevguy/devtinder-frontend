@@ -3,6 +3,7 @@ import { selectUserDetails } from "../redux/selectors/userSelector";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useLogin } from "../hooks/useLogin";
+import logo from "../../public/logo2.png"
 
 const Navbar = () => {
   // this user userDetails comes from redux userSlice
@@ -15,8 +16,8 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-200 shadow-sm">
       <div className="flex-1">
-        <Link to={"/"} className="btn btn-ghost text-xl">
-          DevTinder
+        <Link to={"/"} className="btn btn-ghost text-xl flex items-center gap-2 w-fit">
+          <img src={logo} alt="logo" className="w-auto h-8" /> DevTinder
         </Link>
       </div>
       <div className="flex gap-2">
