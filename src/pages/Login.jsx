@@ -24,6 +24,7 @@ const Login = () => {
                   <fieldset className="fieldset relative">
                     <legend className="fieldset-legend">First Name</legend>
                     <Field
+                      autoFocus={!isLogin}
                       type="text"
                       name="firstName"
                       className="input"
@@ -59,6 +60,7 @@ const Login = () => {
                 <fieldset className="fieldset relative">
                   <legend className="fieldset-legend">Email</legend>
                   <Field
+                    autoFocus={isLogin}
                     type="text"
                     name="emailId"
                     className="input"
