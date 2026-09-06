@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import UserSkeleton from "./UserSkeleton";
 import { logEvent } from "../utils/analytics";
 import {
@@ -36,39 +36,51 @@ const UserCard = React.forwardRef(
       }
     }, [reqItem, controls]);
 
-    const handleDragEnd = (event, info) => {
-      const swipeThreshold = 100;
-      
-      // If tutorial is active, just dismiss it and snap back without making API calls
+    const triggerSwipeRight = useCallback(() => {
       if (showTutorial) {
-        if (Math.abs(info.offset.x) > swipeThreshold) {
-          onTutorialSwipe?.();
-        }
+        onTutorialSwipe?.();
         controls.start({ x: 0, transition: { type: "spring", stiffness: 300, damping: 20 } });
         return;
       }
+      controls.start({ x: window.innerWidth, transition: { duration: 0.3 } });
+      logEvent({ category: "Feed", action: "Action", label: "Accepted (Swipe)" });
+      handleSendRequest("interested", _id);
+    }, [showTutorial, onTutorialSwipe, controls, handleSendRequest, _id]);
 
+    const triggerSwipeLeft = useCallback(() => {
+      if (showTutorial) {
+        onTutorialSwipe?.();
+        controls.start({ x: 0, transition: { type: "spring", stiffness: 300, damping: 20 } });
+        return;
+      }
+      controls.start({ x: -window.innerWidth, transition: { duration: 0.3 } });
+      logEvent({ category: "Feed", action: "Action", label: "Ignored (Swipe)" });
+      handleSendRequest("ignored", _id);
+    }, [showTutorial, onTutorialSwipe, controls, handleSendRequest, _id]);
+
+    // Keyboard Shortcuts for Desktop
+    useEffect(() => {
+      if (!isTopCard || isReqLoading) return;
+
+      const handleKeyDown = (e) => {
+        if (e.key === "ArrowRight") {
+          triggerSwipeRight();
+        } else if (e.key === "ArrowLeft") {
+          triggerSwipeLeft();
+        }
+      };
+
+      window.addEventListener("keydown", handleKeyDown);
+      return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [isTopCard, isReqLoading, triggerSwipeLeft, triggerSwipeRight]);
+
+    const handleDragEnd = (event, info) => {
+      const swipeThreshold = 100;
+      
       if (info.offset.x > swipeThreshold) {
-        // Swipe Right
-        controls.start({ x: window.innerWidth, transition: { duration: 0.3 } });
-        logEvent({
-          category: "Feed",
-          action: "Action",
-          label: "Accepted (Swipe)",
-        });
-        handleSendRequest("interested", _id);
+        triggerSwipeRight();
       } else if (info.offset.x < -swipeThreshold) {
-        // Swipe Left
-        controls.start({
-          x: -window.innerWidth,
-          transition: { duration: 0.3 },
-        });
-        logEvent({
-          category: "Feed",
-          action: "Action",
-          label: "Ignored (Swipe)",
-        });
-        handleSendRequest("ignored", _id);
+        triggerSwipeLeft();
       } else {
         // Snap back if threshold not met
         controls.start({
@@ -103,41 +115,32 @@ const UserCard = React.forwardRef(
         <div className="card-body pointer-events-none">
           <h2 className="card-title text-2xl">{`${firstName} ${lastName}`}</h2>
           <p className="text-sm opacity-80">{about}</p>
-
-          {/* hide buttons */}
-          {/* <div className="card-actions justify-end mt-4 pointer-events-auto">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (showTutorial) {
-                  onTutorialSwipe?.();
-                  return;
-                }
-                logEvent({ category: "Feed", action: "Action", label: "Ignored" });
-                handleSendRequest("ignored", _id);
-              }}
-              disabled={isReqLoading}
-              className="btn btn-outline flex-1"
-            >
-              {isIgnored ? "Ignoring..." : "Ignore"}
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (showTutorial) {
-                  onTutorialSwipe?.();
-                  return;
-                }
-                logEvent({ category: "Feed", action: "Action", label: "Accepted" });
-                handleSendRequest("interested", _id);
-              }}
-              disabled={isReqLoading}
-              className="btn btn-secondary flex-1"
-            >
-              {isInterested ? "Accepting..." : "Accept"}
-            </button>
-          </div> */}
         </div>
+
+        {/* Desktop floating circular buttons */}
+        <div className="absolute -bottom-24 w-full hidden md:flex justify-center gap-12 pointer-events-auto">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              triggerSwipeLeft();
+            }}
+            disabled={isReqLoading}
+            className="w-16 h-16 rounded-full bg-base-200 border-2 border-red-500 text-red-500 text-3xl font-bold flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors shadow-lg disabled:opacity-50"
+          >
+            ✕
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              triggerSwipeRight();
+            }}
+            disabled={isReqLoading}
+            className="w-16 h-16 rounded-full bg-base-200 border-2 border-green-500 text-green-500 text-4xl flex items-center justify-center hover:bg-green-500 hover:text-white transition-colors shadow-lg pb-1 disabled:opacity-50"
+          >
+            ♥
+          </button>
+        </div>
+
         {showTutorial && <SwipeTutorial />}
       </motion.div>
     );

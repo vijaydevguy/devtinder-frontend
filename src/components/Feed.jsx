@@ -35,13 +35,19 @@ const Feed = () => {
       try {
         // Construct a safe payload containing only the allowed fields to pass backend validation
         const safePayload = { hasSeenTutorial: true };
-        
+
         if (profile) {
           const allowedFields = [
-            "firstName", "lastName", "emailId", "photoUrl", 
-            "gender", "age", "about", "skills"
+            "firstName",
+            "lastName",
+            "emailId",
+            "photoUrl",
+            "gender",
+            "age",
+            "about",
+            "skills",
           ];
-          
+
           allowedFields.forEach((field) => {
             if (profile[field] !== undefined && profile[field] !== null) {
               safePayload[field] = profile[field];
@@ -50,7 +56,7 @@ const Feed = () => {
         }
 
         await updateProfile(safePayload);
-        
+
         // Hide tutorial only after successful API call
         dispatch(editUser({ ...user, hasSeenTutorial: true }));
       } catch (err) {
@@ -62,7 +68,7 @@ const Feed = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-80px)] overflow-hidden">
       {(Feeds?.length > 0 || loading) && (
-        <div className="relative w-full max-w-sm h-[550px] flex items-center justify-center mt-10">
+        <div className="relative w-full max-w-sm h-[550px] flex  justify-center mt-0 items-start">
           {loading && (!Feeds || Feeds.length === 0) && <UserSkeleton />}
 
           {Feeds &&
