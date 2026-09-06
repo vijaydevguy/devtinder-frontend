@@ -17,7 +17,7 @@ const Navbar = () => {
     <div className="navbar bg-base-200 shadow-sm">
       <div className="flex-1">
         <Link to={"/"} className="btn btn-ghost text-xl flex items-center gap-2 w-fit">
-          <img src={logo} alt="logo" className="w-auto h-8" /> DevTinder
+          <img src={logo} alt="logo" className="w-auto h-8 object-cover object-center select-none pointer-events-none" /> DevTinder
         </Link>
       </div>
       <div className="flex gap-2">
