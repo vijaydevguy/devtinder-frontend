@@ -4,17 +4,10 @@ import UserCard from "./UserCard";
 import { useSelector } from "react-redux";
 import { feedSelector } from "../redux/selectors/feedSelector";
 import UserSkeleton from "./UserSkeleton";
-import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
 const Feed = () => {
   const didInitialLoad = useRef(false);
   const { getFeed, loading, hasMore, handleSendRequest, reqItem } = useFeed();
-
-  const { lastElementRef } = useInfiniteScroll({
-    loading,
-    hasMore,
-    onLoadMore: getFeed,
-  });
 
   const Feeds = useSelector(feedSelector);
 
@@ -24,34 +17,41 @@ const Feed = () => {
     getFeed();
   }, []);
 
-  // console.log(Feeds, "testFeed");
+  // Fetch more items when running low (e.g., less than 3 items left)
+  useEffect(() => {
+    if (Feeds && Feeds.length < 3 && hasMore && !loading) {
+      getFeed();
+    }
+  }, [Feeds, hasMore, loading, getFeed]);
 
   return (
-    <div>
-      <div className="flex flex-col gap-6 w-fit mx-auto items-center justify-center my-10">
-       
-        {console.log(Feeds, "testFeed")}
-        {
-          Feeds &&
-          Feeds.length > 0 &&
-          Feeds.map((item, i) => {
-            // console.log({ item }, "testItem");
-            const isLastElement = Feeds.length == i + 1;
+    <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-80px)] overflow-hidden">
+      
+      {(Feeds?.length > 0 || loading) && (
+        <div className="relative w-full max-w-sm h-[550px] flex items-center justify-center mt-10">
+          
+          {loading && (!Feeds || Feeds.length === 0) && <UserSkeleton />}
+
+          {Feeds && Feeds.slice(0, 2).reverse().map((feedItem) => {
+            const isTopCard = feedItem._id === Feeds[0]._id;
             return (
               <UserCard
-                key={item._id || i}
-                ref={isLastElement ? lastElementRef : null}
-                item={item}
+                key={feedItem._id}
+                item={feedItem}
                 handleSendRequest={handleSendRequest}
                 reqItem={reqItem}
+                isTopCard={isTopCard}
               />
             );
           })}
+        </div>
+      )}
 
-           {loading && <UserSkeleton />}
-      </div>
-
-      {(!Feeds || Feeds.length <= 0) && !loading && <h2 className="w-full h-screen items-center justify-center">No data found</h2>}
+      {(!Feeds || Feeds.length <= 0) && !loading && (
+        <div className="flex-1 flex items-center justify-center">
+          <h2 className="text-2xl opacity-70">No more profiles found</h2>
+        </div>
+      )}
     </div>
   );
 };
