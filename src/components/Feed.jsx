@@ -1,15 +1,21 @@
 import { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import useFeed from "../hooks/useFeed";
 import UserCard from "./UserCard";
-import { useSelector } from "react-redux";
 import { feedSelector } from "../redux/selectors/feedSelector";
 import UserSkeleton from "./UserSkeleton";
+import { updateProfile } from "../services/profileService";
+import { editUser } from "../redux/slices/userSlice";
+import { selectUserDetails } from "../redux/selectors/userSelector";
 
 const Feed = () => {
+  const user = useSelector((store) => store.user);
+  const dispatch = useDispatch();
   const didInitialLoad = useRef(false);
   const { getFeed, loading, hasMore, handleSendRequest, reqItem } = useFeed();
 
   const Feeds = useSelector(feedSelector);
+  const profile = useSelector(selectUserDetails);
 
   useEffect(() => {
     if (didInitialLoad.current) return;
@@ -24,26 +30,58 @@ const Feed = () => {
     }
   }, [Feeds, hasMore, loading, getFeed]);
 
+  const handleTutorialComplete = async () => {
+    if (user && !user.hasSeenTutorial) {
+      try {
+        // Construct a safe payload containing only the allowed fields to pass backend validation
+        const safePayload = { hasSeenTutorial: true };
+        
+        if (profile) {
+          const allowedFields = [
+            "firstName", "lastName", "emailId", "photoUrl", 
+            "gender", "age", "about", "skills"
+          ];
+          
+          allowedFields.forEach((field) => {
+            if (profile[field] !== undefined && profile[field] !== null) {
+              safePayload[field] = profile[field];
+            }
+          });
+        }
+
+        await updateProfile(safePayload);
+        
+        // Hide tutorial only after successful API call
+        dispatch(editUser({ ...user, hasSeenTutorial: true }));
+      } catch (err) {
+        console.error("Failed to update tutorial status", err);
+      }
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center justify-center min-h-[calc(100vh-80px)] overflow-hidden">
-      
       {(Feeds?.length > 0 || loading) && (
         <div className="relative w-full max-w-sm h-[550px] flex items-center justify-center mt-10">
-          
           {loading && (!Feeds || Feeds.length === 0) && <UserSkeleton />}
 
-          {Feeds && Feeds.slice(0, 2).reverse().map((feedItem) => {
-            const isTopCard = feedItem._id === Feeds[0]._id;
-            return (
-              <UserCard
-                key={feedItem._id}
-                item={feedItem}
-                handleSendRequest={handleSendRequest}
-                reqItem={reqItem}
-                isTopCard={isTopCard}
-              />
-            );
-          })}
+          {Feeds &&
+            Feeds.slice(0, 2)
+              .reverse()
+              .map((feedItem) => {
+                const isTopCard = feedItem._id === Feeds[0]._id;
+                return (
+                  <UserCard
+                    key={feedItem._id}
+                    item={feedItem}
+                    handleSendRequest={handleSendRequest}
+                    reqItem={reqItem}
+                    isTopCard={isTopCard}
+                    showTutorial={isTopCard && user && !user.hasSeenTutorial}
+                    onTutorialSwipe={handleTutorialComplete}
+                  />
+                );
+              })}
         </div>
       )}
 

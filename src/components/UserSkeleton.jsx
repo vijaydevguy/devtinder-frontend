@@ -3,7 +3,7 @@ import React from "react";
 const UserSkeleton = () => {
   return (
     <>
-      {Array.from({ length: 2 }).map((_, index) => (
+      {Array.from({ length: 1 }).map((_, index) => (
         <div
           key={index}
           className="card bg-base-100 w-96 shadow-sm justify-center"
